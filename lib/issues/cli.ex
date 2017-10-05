@@ -6,7 +6,9 @@ defmodule Issues.CLI do
 	"""
 	
 	def run(command) do
-		parse_args(command)
+		command
+		|>parse_args
+		|>process
 	end
 	
 	@doc """
@@ -25,4 +27,20 @@ defmodule Issues.CLI do
 		end
 	end
 	
+	def process(:help) do
+		IO.puts """
+		usage: issues <user> <project> [count | #@default_count]
+		"""
+		System.halt(0)
+	end
+	
+	def process({user, project, _count}) do
+		Issues.GitHubIssues.fetch(user, project)
+		|> decode_response
+	end
+	
+	def decode_response({:ok, body}), do: body
+	def decode_response({:error, error}) do
+		IO.puts "Error fetching from Github: #{error["message"]}"
+	end
 end
