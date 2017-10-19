@@ -1,7 +1,5 @@
 # Issues
-
-**TODO: Add description**
-
+A generic Github Issues parser written in Elixir
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
