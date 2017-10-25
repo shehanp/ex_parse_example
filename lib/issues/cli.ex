@@ -1,6 +1,7 @@
 defmodule Issues.CLI do
 	@default_count 4
 	
+	import Issues.TableFormatter, only: [ table_to_columns: 2 ]	
 	@moduledoc """
 	handle the command line parsing and the dispatch to the various functions that end up generating a table of the last _n_ issues in a github project
 	"""
@@ -38,12 +39,13 @@ defmodule Issues.CLI do
 		|> decode_response
 		|> sort_ascending
 		|> Enum.take(count)
+		|> table_to_columns(["number", "created_at", "title"])
 	end
 	
 	def decode_response({:ok, body}), do: body
 	def decode_response({:error, error}) do
 		{_, message} = List.keyfind(error, "message", 0)
-		IO.puts "Error fetching from Github: #{error["message"]}"
+		IO.puts "Error fetching from Github: #{error[message]}"
 		System.halt(2)
 	end
 	
