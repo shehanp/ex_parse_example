@@ -7,8 +7,8 @@ defmodule Issues.CLI do
 	"""
 	def run(command) do
 		command
-		|>parse_args
-		|>process
+		|> parse_args
+		|> process
 	end
 	
 	@doc """
@@ -17,8 +17,7 @@ defmodule Issues.CLI do
 	
 	"""
 	def parse_args(command) do
-		parse = OptionParser.parse(command, switches: [help: :boolean],
-										  aliases: [ h:   :help])
+		parse = OptionParser.parse(command, switches: [help: :boolean], aliases: [h: :help])
 		case parse do
 			{[help: true], _, _} -> :help
 			{_, [ user, project, count], _} -> { user, project, String.to_integer(count) }
